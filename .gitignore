@@ -1,0 +1,21 @@
+# Archivos compilados de Python
+__pycache__/
+*.pyc
+
+# Base de datos local (SQLite por defecto)
+db.sqlite3
+
+# Archivos de entorno (variables secretas)
+.env
+
+# Migraciones (opcional, si no quieres subirlas)
+*/migrations/
+
+# Archivos de VS Code
+.vscode/
+
+# Archivos de logs
+*.log
+
+# Archivos temporales
+*.tmp
