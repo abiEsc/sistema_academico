@@ -6,42 +6,55 @@
     <title>Olimpiadas Bíblicas - Hechos de los Apóstoles</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .numero-pregunta {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #007bff;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin: 5px;
-            cursor: pointer;
+    .numero-pregunta {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #007bff;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin: 5px;
+        cursor: pointer;
+    }
+    .numero-pregunta.clicked {
+        background-color: #dc3545; /* rojo Bootstrap */
+    }
+        .modal-body {
+          font-size: 1.5rem; /* letras más grandes */
         }
+        .modal-title {
+          font-size: 2rem; /* título más grande */
+          font-weight: bold;
+        }
+
     </style>
 </head>
 <body class="bg-light">
 
 <div class="container mt-5">
-    <h1 class="text-center text-primary mb-4">Olimpiadas Bíblicas - Hechos de los Apóstoles</h1>
+    <h1 class="text-center text-primary mb-4">¿QUIÉN SOY?</h1>
 
     <!-- Botones numerados como fichas -->
+  
     <div class="d-flex flex-wrap justify-content-center">
-        {% for question in questions %}
-            <div class="numero-pregunta" 
-                 data-bs-toggle="modal" 
-                 data-bs-target="#modalPregunta{{ forloop.counter }}">
-                {{ forloop.counter }}
-            </div>
-        {% endfor %}
-    </div>
+    {% for question in questions %}
+        <div id="ficha{{ forloop.counter }}" 
+             class="numero-pregunta" 
+             data-bs-toggle="modal" 
+             data-bs-target="#modalPregunta{{ forloop.counter }}">
+            {{ forloop.counter }}
+        </div>
+    {% endfor %}
+</div>
 
     <!-- Modales -->
     {% for question in questions %}
     <div class="modal fade" id="modalPregunta{{ forloop.counter }}" tabindex="-1"
          data-correct="option-{{ question.id }}-{{ question.correct_option_id }}">
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Pregunta {{ forloop.counter }}</h5>
@@ -70,6 +83,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.modal').forEach(function(modal) {
         modal.addEventListener('shown.bs.modal', function () {
+            // Pintar la ficha correspondiente
+            const fichaId = "ficha" + modal.id.replace("modalPregunta", "");
+            const ficha = document.getElementById(fichaId);
+            if (ficha) {
+                ficha.classList.add("clicked");
+            }
+
+            // Temporizador
             let timeLeft = 15;
             const timerElement = modal.querySelector('.timer');
             const correctId = modal.getAttribute('data-correct');
@@ -88,6 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
 
 </body>
 </html>
