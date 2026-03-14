@@ -1,6 +1,11 @@
 import folium
 from django.shortcuts import render
 from .models import Question, Character
+from .models import VerseCard
+
+def verse_cards(request):
+    cards = VerseCard.objects.all()
+    return render(request, "verse_cards.html", {"cards": cards})
 
 def quiz_view(request):
     questions = Question.objects.prefetch_related("options").all()

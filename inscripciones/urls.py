@@ -6,4 +6,5 @@ urlpatterns = [
     path("quiz/", quiz_view, name="quiz"),
     path("memory/", memory_game, name="memory_game"),
     path("mapa/", views.map_view, name="mapa"),
+    path("verse_cards/", views.verse_cards, name="verse_cards"),
 ]

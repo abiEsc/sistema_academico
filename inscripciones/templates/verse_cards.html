@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fichas de Hechos</title>
+    <style>
+        .card {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 10px;
+            cursor: pointer;
+            width: 200px;
+            display: inline-block;
+        }
+
+        /* Modal pantalla completa */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.9); /* fondo oscuro */
+            color: #fff;
+            text-align: center;
+        }
+
+        .modal-content {
+            margin: 10% auto;
+            padding: 20px;
+            max-width: 800px;
+        }
+
+        .modal h2 {
+            font-size: 3em;       /* título grande */
+            color: #ffd700;       /* dorado llamativo */
+            margin-bottom: 20px;
+        }
+
+        .modal p {
+            font-size: 2em;       /* texto grande */
+            line-height: 1.5;
+            color: #ffffff;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 3em;
+            font-weight: bold;
+            cursor: pointer;
+            color: #ff4444;
+        }
+    </style>
+    <script>
+        function showModal(reference, fullText) {
+            document.getElementById("modalReference").innerText = reference;
+            document.getElementById("modalText").innerText = fullText;
+            document.getElementById("verseModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("verseModal").style.display = "none";
+        }
+    </script>
+</head>
+<body>
+    <h1>MEMORIZACIÓN DE TEXTOS.</h1>
+
+    {% for card in cards %}
+        <div class="card" onclick="showModal('{{ card.reference }}', '{{ card.full_text }}')">
+            <strong>{{ card.reference }}</strong><br>
+            {{ card.excerpt }}
+        </div>
+    {% empty %}
+        <p>No hay fichas cargadas todavía.</p>
+    {% endfor %}
+
+    <!-- Modal pantalla completa -->
+    <div id="verseModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <h2 id="modalReference"></h2>
+            <p id="modalText"></p>
+        </div>
+    </div>
+</body>
+</html>
