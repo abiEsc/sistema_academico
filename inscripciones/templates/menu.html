@@ -102,6 +102,7 @@
     <div class="menu">
         <a href="{% url 'quiz' %}">❓ ¿Quién soy?</a>
         <a href="{% url 'verse_cards' %}">📖 Memorización de Textos.</a>
+        <a href="{% url 'general_quiz' %}">📖 Conocimiento General.</a>
         <a href="{% url 'memory_game' %}">🖼️ Imágenes</a>
         <a href="{% url 'mapa' %}">🗺️ Mapa</a>
     </div>
@@ -152,5 +153,20 @@
             <p>No hay imágenes cargadas todavía.</p>
         {% endfor %}
     </div>
+   <h2>Conocimiento General</h2>
+{% for question in questions %}
+    <div class="card">
+        <strong>{{ question.text }}</strong>
+        <ul>
+            {% for option in question.options.all %}
+                <li>{{ option.text }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% empty %}
+    <p>No hay preguntas de conocimiento general cargadas todavía.</p>
+{% endfor %}
+
+
 </body>
 </html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Conocimiento General</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .numero-pregunta {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #28a745;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .numero-pregunta:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center text-success mb-4">Conocimiento General</h1>
+
+    <!-- Fichas numeradas -->
+    <div class="d-flex flex-wrap justify-content-center">
+        {% for question in questions %}
+            <div id="fichaGeneral{{ forloop.counter }}" 
+                 class="numero-pregunta" 
+                 data-bs-toggle="modal" 
+                 data-bs-target="#modalGeneral{{ forloop.counter }}">
+                {{ forloop.counter }}
+            </div>
+        {% empty %}
+            <p>No hay preguntas cargadas todavía.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Modales ocultos -->
+    {% for question in questions %}
+    <div class="modal fade" id="modalGeneral{{ forloop.counter }}" tabindex="-1"
+         data-correct="option-{{ question.id }}-{{ question.correct_option_id }}">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Pregunta {{ forloop.counter }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p class="fw-bold">{{ question.text }}</p>
+            <p>Tiempo restante: <span class="timer">15</span> segundos</p>
+            <!-- Contenedor para la respuesta correcta -->
+            <div class="respuesta-correcta" style="display:none;">
+                <p class="text-success fw-bold">Respuesta correcta: {{ question.options.first.text }}</p>
+            </div>
+        </div>
+
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.modal').forEach(function(modal) {
+        modal.addEventListener('shown.bs.modal', function () {
+            let timerSpan = modal.querySelector('.timer');
+            let respuestaDiv = modal.querySelector('.respuesta-correcta');
+            if (!timerSpan) return;
+
+            let timeLeft = 15;
+            timerSpan.textContent = timeLeft;
+
+            if (modal.countdownInterval) {
+                clearInterval(modal.countdownInterval);
+            }
+
+            modal.countdownInterval = setInterval(function() {
+                timeLeft--;
+                timerSpan.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(modal.countdownInterval);
+                    timerSpan.textContent = "Tiempo agotado";
+                    if (respuestaDiv) {
+                        respuestaDiv.style.display = "block"; // mostrar la respuesta
+                    }
+                }
+            }, 1000);
+        });
+
+        modal.addEventListener('hidden.bs.modal', function () {
+            if (modal.countdownInterval) {
+                clearInterval(modal.countdownInterval);
+            }
+            let respuestaDiv = modal.querySelector('.respuesta-correcta');
+            if (respuestaDiv) {
+                respuestaDiv.style.display = "none"; // ocultar de nuevo al cerrar
+            }
+        });
+    });
+});
+</script>
+
+
+</body>
+</html>

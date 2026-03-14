@@ -24,3 +24,10 @@ class VerseCard(models.Model):
 
     def __str__(self):
         return self.reference
+class GeneralQuestion(models.Model):
+    text = models.CharField(max_length=255)
+
+class GeneralOption(models.Model):
+    question = models.ForeignKey(GeneralQuestion, related_name="options", on_delete=models.CASCADE)
+    text = models.CharField(max_length=255)
+    is_correct = models.BooleanField(default=False)

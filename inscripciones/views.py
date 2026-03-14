@@ -2,6 +2,25 @@ import folium
 from django.shortcuts import render
 from .models import Question, Character
 from .models import VerseCard
+from .models import GeneralQuestion
+
+def general_quiz_view(request):
+    questions = GeneralQuestion.objects.prefetch_related("options").all()
+
+    questions_with_correct = []
+    for q in questions:
+        correct_option = q.options.filter(is_correct=True).first()
+        questions_with_correct.append({
+            "id": q.id,
+            "text": q.text,
+            "options": q.options.all(),
+            "correct_option_id": correct_option.id if correct_option else None
+        })
+
+    return render(request, "general_quiz.html", {
+        "questions": questions_with_correct
+    })
+
 def menu_view(request):
     return render(request, "menu.html")
 def verse_cards(request):
