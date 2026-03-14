@@ -27,7 +27,23 @@ class VerseCard(models.Model):
 class GeneralQuestion(models.Model):
     text = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.text
 class GeneralOption(models.Model):
     question = models.ForeignKey(GeneralQuestion, related_name="options", on_delete=models.CASCADE)
     text = models.CharField(max_length=255)
     is_correct = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.text
+
+class Discurso(models.Model):
+    cita_biblica = models.CharField(max_length=100)
+    orador = models.CharField(max_length=100)
+    audiencia = models.CharField(max_length=200)
+    tema_central = models.CharField(max_length=200)
+
+    def __str__(self):
+        return f"{self.cita_biblica} - {self.orador}"
+
+

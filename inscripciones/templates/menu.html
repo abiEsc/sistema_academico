@@ -12,7 +12,7 @@
 }
 
 .menu a {
-    background-color: #ffd700;   /* fondo dorado para cada enlace */
+    background-color: #9be4bf;   /* fondo dorado para cada enlace */
     color: #000;                 /* texto negro para contraste */
     text-decoration: none;
     padding: 10px 20px;
@@ -22,7 +22,7 @@
 }
 
 .menu a:hover {
-    background-color: #f1c40f;   /* dorado más intenso al pasar el mouse */
+    background-color: #8ad8b3;   /* dorado más intenso al pasar el mouse */
     color: #fff;                 /* texto blanco al pasar el mouse */
 }
 
@@ -43,7 +43,7 @@
         }
 
         .menu button {
-            background-color: #ffd700;
+            background-color: #8ff3b1;
             border: none;
             padding: 10px 20px;
             margin: 5px;
@@ -53,7 +53,7 @@
         }
 
         .menu button:hover {
-            background-color: #f1c40f;
+            background-color: #57e085;
         }
 
         .section {
@@ -100,15 +100,17 @@
 
     <!-- Menú con botones -->
     <div class="menu">
-        <a href="{% url 'quiz' %}">❓ ¿Quién soy?</a>
-        <a href="{% url 'verse_cards' %}">📖 Memorización de Textos.</a>
-        <a href="{% url 'general_quiz' %}">📖 Conocimiento General.</a>
-        <a href="{% url 'memory_game' %}">🖼️ Imágenes</a>
-        <a href="{% url 'mapa' %}">🗺️ Mapa</a>
-    </div>
+    <a href="{% url 'general_quiz' %}">📖 CONOCIMIENTO GENERAL.</a>
+    <a href="{% url 'quiz' %}">❓ ¿QUIÉN SOY?</a>
+    <a href="{% url 'verse_cards' %}">📖 MEMORIZACIÓN DE TEXTOS.</a>
+    <a href="{% url 'discurso_cards' %}">📖 DISCURSOS.</a>
+    <a href="{% url 'memory_game' %}">🖼️ IMÁGENES</a>
+    <a href="{% url 'mapa' %}">🗺️ MAPA</a>
+</div>
+
 
     <div class="banner">
-        <img src="/media/characters/damasco.jpg" alt="Banner Hechos de los Apóstoles">
+        <img src="/media/characters/esteban.jpg" alt="Banner Hechos de los Apóstoles">
     </div>
 
     <!-- Sección Preguntas -->
@@ -150,10 +152,10 @@
                 <img src="{{ character.image.url }}" alt="{{ character.name }}">
             </div>
         {% empty %}
-            <p>No hay imágenes cargadas todavía.</p>
+            
         {% endfor %}
     </div>
-   <h2>Conocimiento General</h2>
+   <h2>SHALOM-PAZ DE DIOS</h2>
 {% for question in questions %}
     <div class="card">
         <strong>{{ question.text }}</strong>
@@ -164,7 +166,7 @@
         </ul>
     </div>
 {% empty %}
-    <p>No hay preguntas de conocimiento general cargadas todavía.</p>
+   
 {% endfor %}
 
 

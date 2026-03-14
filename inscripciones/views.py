@@ -3,6 +3,13 @@ from django.shortcuts import render
 from .models import Question, Character
 from .models import VerseCard
 from .models import GeneralQuestion
+from .models import Discurso
+
+def discurso_cards(request):
+    # Recupera todos los discursos desde la base de datos
+    discursos = Discurso.objects.all()
+    # Envía los discursos a la plantilla
+    return render(request, "discurso_cards.html", {"discursos": discursos})
 
 def general_quiz_view(request):
     questions = GeneralQuestion.objects.prefetch_related("options").all()

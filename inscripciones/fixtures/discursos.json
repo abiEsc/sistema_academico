@@ -1,0 +1,22 @@
+[
+  {
+    "model": "inscripciones.discurso",
+    "pk": 1,
+    "fields": {
+      "cita_biblica": "Hechos 2:14-41",
+      "orador": "Pedro",
+      "audiencia": "Judíos en Jerusalén",
+      "tema_central": "Primer sermón en Pentecostés"
+    }
+  },
+  {
+    "model": "inscripciones.discurso",
+    "pk": 2,
+    "fields": {
+      "cita_biblica": "Hechos 17:22-31",
+      "orador": "Pablo",
+      "audiencia": "Filósofos en el Areópago",
+      "tema_central": "El Dios desconocido"
+    }
+  }
+]
