@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <title>Menú Principal</title>
+    <style>
+        /* Menú superior */
+.menu {
+    background-color: #34495e; /* franja oscura */
+    padding: 10px;
+    text-align: center;
+}
+
+.menu a {
+    background-color: #ffd700;   /* fondo dorado para cada enlace */
+    color: #000;                 /* texto negro para contraste */
+    text-decoration: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.menu a:hover {
+    background-color: #f1c40f;   /* dorado más intenso al pasar el mouse */
+    color: #fff;                 /* texto blanco al pasar el mouse */
+}
+
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-top: 20px;
+        }
+
+        /* Menú superior */
+        .menu {
+            background-color: #34495e;
+            padding: 10px;
+        }
+
+        .menu button {
+            background-color: #ffd700;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 5px;
+        }
+
+        .menu button:hover {
+            background-color: #f1c40f;
+        }
+
+        .section {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .card {
+            border: 2px solid #ccc;
+            padding: 15px;
+            margin: 10px;
+            cursor: pointer;
+            width: 200px;
+            display: inline-block;
+            background-color: #e6f7ff;
+            border-radius: 10px;
+        }
+
+        .card:hover {
+            background-color: #cceeff;
+        }
+
+        .character {
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .character img {
+            max-width: 150px;
+            border-radius: 10px;
+        }
+    </style>
+    <script>
+        function showSection(sectionId) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+            // Mostrar la sección seleccionada
+            document.getElementById(sectionId).style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+    <h1>HECHOS DE LOS APÓSTOLOLES</h1>
+
+    <!-- Menú con botones -->
+    <div class="menu">
+        <a href="{% url 'quiz' %}">❓ ¿Quién soy?</a>
+        <a href="{% url 'verse_cards' %}">📖 Memorización de Textos.</a>
+        <a href="{% url 'memory_game' %}">🖼️ Imágenes</a>
+        <a href="{% url 'mapa' %}">🗺️ Mapa</a>
+    </div>
+
+    <div class="banner">
+        <img src="/media/characters/damasco.jpg" alt="Banner Hechos de los Apóstoles">
+    </div>
+
+    <!-- Sección Preguntas -->
+    <div id="preguntas" class="section">
+        <h2>Preguntas</h2>
+        {% for question in questions %}
+            <div class="card">
+                <strong>{{ question.text }}</strong>
+                <ul>
+                    {% for option in question.options.all %}
+                        <li>{{ option.text }} {% if option.is_correct %}(Correcta){% endif %}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% empty %}
+            <p>No hay preguntas cargadas todavía.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Sección Versículos -->
+    <div id="versiculos" class="section">
+        <h2>Fichas de Versículos</h2>
+        {% for card in cards %}
+            <div class="card">
+                <strong>{{ card.reference }}</strong><br>
+                {{ card.excerpt }}
+            </div>
+        {% empty %}
+            <p>No hay fichas cargadas todavía.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Sección Imágenes -->
+    <div id="imagenes" class="section">
+        <h2>Imágenes</h2>
+        {% for character in characters %}
+            <div class="character">
+                <p>{{ character.name }}</p>
+                <img src="{{ character.image.url }}" alt="{{ character.name }}">
+            </div>
+        {% empty %}
+            <p>No hay imágenes cargadas todavía.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>

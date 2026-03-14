@@ -1,58 +1,68 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>{{ question.text }}</title>
+    <title>Olimpiadas Bíblicas - Hechos de los Apóstoles</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .correct {
-            border: 2px solid green;
-            background-color: #e6ffe6;
-            padding: 5px;
-            border-radius: 5px;
-        }
-        #timer {
-            font-size: 1.5rem;
+        .numero-pregunta {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-weight: bold;
-            color: #dc3545; /* rojo */
+            margin-right: 10px;
+            flex-shrink: 0;
         }
     </style>
 </head>
 <body class="bg-light">
 
 <div class="container mt-5">
-    <h2 class="mb-4">{{ question.text }}</h2>
+    <h1 class="text-center text-primary mb-4">Olimpiadas Bíblicas - Hechos de los Apóstoles</h1>
 
-    <!-- Cronómetro -->
-    <p>Tiempo restante: <span id="timer">15</span> segundos</p>
+    <form method="post" class="card p-4 shadow">
+        {% csrf_token %}
+        {% for question in questions %}
+            <div class="card mb-3 shadow">
+                <div class="card-header d-flex align-items-center">
+                    <!-- Número en círculo -->
+                    <div class="numero-pregunta">
+                        {{ forloop.counter }}
+                    </div>
+                    <!-- Botón que despliega la pregunta -->
+                    <button class="btn btn-link fw-bold" type="button" 
+                            data-bs-toggle="collapse" 
+                            data-bs-target="#pregunta{{ forloop.counter }}">
+                        Pregunta {{ forloop.counter }}
+                    </button>
+                </div>
 
-    {% for option in question.options.all %}
-        <div id="option-{{ option.id }}" class="form-check mb-2">
-            <input type="radio" class="form-check-input" name="option" value="{{ option.id }}">
-            <label class="form-check-label">{{ option.text }}</label>
-        </div>
-    {% endfor %}
-
-    <a href="?q={{ index|add:1 }}" class="btn btn-primary mt-3">NEXT</a>
+                <!-- Contenido oculto -->
+                <div id="pregunta{{ forloop.counter }}" class="collapse">
+                    <div class="card-body">
+                        <p class="card-text fw-bold">{{ question.text }}</p>
+                        {% for option in question.options.all %}
+                            <div class="form-check">
+                                <input type="radio" class="form-check-input" 
+                                       name="question_{{ question.id }}" 
+                                       value="{{ option.id }}">
+                                <label class="form-check-label">{{ option.text }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-success w-100">Enviar respuestas</button>
+    </form>
 </div>
 
-<script>
-    let timeLeft = 15; // segundos
-    const timerElement = document.getElementById("timer");
-
-    const countdown = setInterval(function() {
-        timeLeft--;
-        timerElement.textContent = timeLeft;
-        if (timeLeft <= 0) {
-            clearInterval(countdown);
-            // Resaltar la opción correcta
-            const correctElement = document.getElementById("option-{{ correct_option_id }}");
-            if (correctElement) {
-                correctElement.classList.add("correct");
-            }
-        }
-    }, 1000); // cada segundo
-</script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

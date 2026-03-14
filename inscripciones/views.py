@@ -2,26 +2,32 @@ import folium
 from django.shortcuts import render
 from .models import Question, Character
 from .models import VerseCard
-
+def menu_view(request):
+    return render(request, "menu.html")
 def verse_cards(request):
     cards = VerseCard.objects.all()
     return render(request, "verse_cards.html", {"cards": cards})
 
 def quiz_view(request):
+    # Traer todas las preguntas con sus opciones
     questions = Question.objects.prefetch_related("options").all()
-    current_index = int(request.GET.get("q", 0))
 
-    if current_index >= len(questions):
-        return render(request, "quiz_end.html")
+    # Construir lista con cada pregunta y su opción correcta
+    questions_with_correct = []
+    for q in questions:
+        correct_option = q.options.filter(is_correct=True).first()
+        questions_with_correct.append({
+            "id": q.id,
+            "text": q.text,
+            "options": q.options.all(),
+            "correct_option_id": correct_option.id if correct_option else None
+        })
 
-    question = questions[current_index]
-    correct_option = question.options.filter(is_correct=True).first()
-
-    return render(request, "quiz_one.html", {
-        "question": question,
-        "index": current_index,
-        "correct_option_id": correct_option.id if correct_option else None
+    # Renderizar la plantilla que usa fichas y modales
+    return render(request, "quiz.html", {
+        "questions": questions_with_correct
     })
+
 
 def memory_game(request): 
     characters = Character.objects.all() 

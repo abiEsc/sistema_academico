@@ -4,35 +4,90 @@
 <head>
     <meta charset="UTF-8">
     <title>Olimpiadas Bíblicas - Hechos de los Apóstoles</title>
-    <!-- Bootstrap CSS desde CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .numero-pregunta {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body class="bg-light">
 
 <div class="container mt-5">
     <h1 class="text-center text-primary mb-4">Olimpiadas Bíblicas - Hechos de los Apóstoles</h1>
 
-    <form method="post" class="card p-4 shadow">
-        {% csrf_token %}
+    <!-- Botones numerados como fichas -->
+    <div class="d-flex flex-wrap justify-content-center">
         {% for question in questions %}
-            <div class="mb-4">
-                <p class="fw-bold">{{ question.text }}</p>
-                <div class="form-check">
-                    {% for option in question.options.all %}
-                        <label class="form-check-label d-block">
-                            <input type="radio" class="form-check-input" name="question_{{ question.id }}" value="{{ option.id }}">
-                            {{ option.text }}
-                        </label>
-                    {% endfor %}
-                </div>
+            <div class="numero-pregunta" 
+                 data-bs-toggle="modal" 
+                 data-bs-target="#modalPregunta{{ forloop.counter }}">
+                {{ forloop.counter }}
             </div>
         {% endfor %}
-        <button type="submit" class="btn btn-success w-100">Enviar respuestas</button>
-    </form>
+    </div>
+
+    <!-- Modales -->
+    {% for question in questions %}
+    <div class="modal fade" id="modalPregunta{{ forloop.counter }}" tabindex="-1"
+         data-correct="option-{{ question.id }}-{{ question.correct_option_id }}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Pregunta {{ forloop.counter }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p class="fw-bold">{{ question.text }}</p>
+            <p>Tiempo restante: <span class="timer">15</span> segundos</p>
+            {% for option in question.options.all %}
+              <div id="option-{{ question.id }}-{{ option.id }}" class="form-check mb-2">
+                <input type="radio" class="form-check-input" 
+                       name="question_{{ question.id }}" 
+                       value="{{ option.id }}">
+                <label class="form-check-label">{{ option.text }}</label>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
 </div>
 
-<!-- Bootstrap JS desde CDN -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.modal').forEach(function(modal) {
+        modal.addEventListener('shown.bs.modal', function () {
+            let timeLeft = 15;
+            const timerElement = modal.querySelector('.timer');
+            const correctId = modal.getAttribute('data-correct');
+            const countdown = setInterval(function() {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    const correctElement = document.getElementById(correctId);
+                    if (correctElement) {
+                        correctElement.classList.add("border", "border-success", "bg-light");
+                    }
+                }
+            }, 1000);
+        });
+    });
+});
+</script>
+
 </body>
 </html>
-
